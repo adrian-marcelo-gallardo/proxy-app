@@ -28,6 +28,12 @@ func ProxyMiddleware(c iris.Context) {
 	// Gets the domain priority object for current domain
 	var domainPriority = domainPriorities[domain]
 
+	// Invalid domain
+	if domainPriority == nil {
+		c.JSON(iris.Map{"status": 400, "result": "invalid-domain"})
+		return
+	}
+
 	// Adds domain to priority Queue
 	Queue.Add(domainPriority)
 
