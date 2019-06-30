@@ -1,0 +1,15 @@
+alpha
+weight:2
+priority:3
+
+omega
+weight:3
+priority:7
+
+beta
+weight:6
+priority:2
+
+delta
+weight:7
+priority:8

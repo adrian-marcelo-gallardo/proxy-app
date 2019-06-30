@@ -3,7 +3,7 @@ package handlers
 import (
 	"encoding/json"
 
-	"github.com/edenriquez/proxy-app/api/middleware"
+	"github.com/adrian-marcelo-gallardo/proxy-app/api/middleware"
 	"github.com/kataras/iris"
 )
 
@@ -13,11 +13,11 @@ func HandlerRedirection(app *iris.Application) {
 }
 
 func proxyHandler(c iris.Context) {
-	response, err := json.Marshal(middleware.Que)
+	response, err := json.Marshal(middleware.Queue.Domains())
 	if err != nil {
 		c.JSON(iris.Map{"status": 400, "result": "parse-error"})
 		return
 	}
-	c.JSON(iris.Map{"result": string(response)})
+	c.JSON(iris.Map{"status": 200, "result": string(response)})
 
 }

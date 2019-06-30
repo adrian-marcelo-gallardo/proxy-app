@@ -8,9 +8,9 @@ import (
 	"sync"
 	"testing"
 
-	handlers "github.com/edenriquez/proxy-app/api/handlers"
-	server "github.com/edenriquez/proxy-app/api/server"
-	utils "github.com/edenriquez/proxy-app/api/utils"
+	handlers "github.com/adrian-marcelo-gallardo/proxy-app/api/handlers"
+	server "github.com/adrian-marcelo-gallardo/proxy-app/api/server"
+	utils "github.com/adrian-marcelo-gallardo/proxy-app/api/utils"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -30,27 +30,26 @@ func init() {
 }
 
 type Response struct {
-	Status       int            `json:"status,omitempty"`
-	Response     string         `json:"result,omitempty"`
-	ResponseText []ResponseText `json:"res,omitempty"`
-}
-
-type ResponseText struct {
+	Status   int    `json:"status,omitempty"`
+	Response string `json:"result,omitempty"`
 }
 
 func TestAlgorithmn(t *testing.T) {
-	fmt.Println("test")
 
 	cases := []struct {
-		// Attr
 		Domain string
 		Output string
 	}{
-		// Values
 		{Domain: "alpha", Output: `["alpha"]`},
+		{Domain: "beta", Output: `["beta","alpha"]`},
+		{Domain: "omega", Output: `["beta","omega","alpha"]`},
+		{Domain: "delta", Output: `["delta","beta","omega","alpha"]`},
+		{Domain: "beta", Output: `["delta","beta","omega","beta","alpha"]`},
+		{Domain: "delta", Output: `["delta","delta","beta","omega","beta","alpha"]`},
+		{Domain: "alpha", Output: `["delta","delta","beta","omega","beta","alpha","alpha"]`},
+		{Domain: "omega", Output: `["delta","delta","beta","omega","beta","omega","alpha","alpha"]`},
 		{Domain: "", Output: "error"},
 	}
-	fmt.Println(cases)
 
 	client := http.Client{}
 
@@ -68,8 +67,7 @@ func TestAlgorithmn(t *testing.T) {
 		err3 := json.Unmarshal(bytes, valuesToCompare)
 		assert.Nil(t, err3)
 
-		fmt.Println("Response:", valuesToCompare.ResponseText)
-		fmt.Println("Status:", valuesToCompare.Status)
+		fmt.Println("Response:", valuesToCompare.Response, "Status:", valuesToCompare.Status)
 
 		assert.Equal(t, singleCase.Output, valuesToCompare.Response)
 	}
